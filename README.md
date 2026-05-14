@@ -4,7 +4,7 @@ An Android app that fetches and displays a list of users from a remote API with 
 
 ## Architecture
 
-Clean Architecture with multi-module structure and MVI pattern.
+Clean Architecture with multi-module structure and MVVM pattern.
 
 ```
 app/          → Entry point, navigation
