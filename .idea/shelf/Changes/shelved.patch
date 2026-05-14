@@ -1,0 +1,276 @@
+Index: feature/userdetails/src/main/java/in/svbneelmane/useranz/presentation/userdetails/UserDetailsScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package `in`.svbneelmane.useranz.presentation.userdetails\n\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.size\nimport androidx.compose.foundation.rememberScrollState\nimport androidx.compose.foundation.shape.CircleShape\nimport androidx.compose.foundation.verticalScroll\nimport androidx.compose.material3.MaterialTheme\nimport androidx.compose.material3.OutlinedButton\nimport androidx.compose.material3.Text\nimport androidx.compose.runtime.Composable\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.draw.clip\nimport androidx.compose.ui.layout.ContentScale\nimport androidx.compose.ui.res.painterResource\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.ui.unit.dp\nimport coil.compose.AsyncImage\nimport `in`.svbneelmane.useranz.feature.userdetails.R\nimport `in`.svbneelmane.useranz.domain.model.User\n\n/**\n * Displays detailed information for a selected user.\n *\n * Shows user avatar, name, and detailed properties including email, company,\n * phone, address, and location information in a scrollable column with\n * a back navigation button.\n *\n * @param user The user object containing all detail information\n * @param onBackClick Callback invoked when back button is pressed\n * @param modifier Compose modifier for layout customization\n *\n * @author shivaprasad-bhat\n * @created May 14, 2026\n */\n@Composable\nfun UserDetailsScreen(\n    user: User,\n    onBackClick: () -> Unit,\n    modifier: Modifier = Modifier\n) {\n    Column(\n        modifier = modifier\n            .fillMaxSize()\n            .verticalScroll(rememberScrollState())\n            .padding(16.dp),\n        verticalArrangement = Arrangement.Top,\n        horizontalAlignment = Alignment.CenterHorizontally\n    ) {\n        OutlinedButton(onClick = onBackClick, modifier = Modifier.align(Alignment.Start)) {\n            Text(text = \"Back\")\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        AsyncImage(\n            model = user.avatarUrl,\n            contentDescription = \"Avatar of ${user.fullName}\",\n            placeholder = painterResource(id = R.drawable.ic_user_placeholder),\n            error = painterResource(id = R.drawable.ic_user_placeholder),\n            contentScale = ContentScale.Crop,\n            modifier = Modifier\n                .size(112.dp)\n                .clip(CircleShape)\n        )\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        Text(\n            text = user.fullName,\n            style = MaterialTheme.typography.headlineSmall,\n            fontWeight = FontWeight.SemiBold\n        )\n\n        Spacer(modifier = Modifier.height(8.dp))\n\n        UserDetailProperty(label = \"Email\", value = user.email)\n        UserDetailProperty(label = \"Username\", value = user.username)\n        UserDetailProperty(label = \"Company\", value = user.company)\n        UserDetailProperty(label = \"Phone\", value = user.phone)\n        UserDetailProperty(label = \"Address\", value = user.address)\n        UserDetailProperty(label = \"State\", value = user.state)\n        UserDetailProperty(label = \"Country\", value = user.country)\n        UserDetailProperty(label = \"ZIP\", value = user.zip)\n    }\n}\n\n@Composable\nprivate fun UserDetailProperty(label: String, value: String) {\n    Column(modifier = Modifier\n        .fillMaxWidth()\n        .padding(top = 12.dp)) {\n        Text(\n            text = label,\n            style = MaterialTheme.typography.labelMedium,\n            color = MaterialTheme.colorScheme.primary\n        )\n        Text(\n            text = value,\n            style = MaterialTheme.typography.bodyLarge\n        )\n    }\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/feature/userdetails/src/main/java/in/svbneelmane/useranz/presentation/userdetails/UserDetailsScreen.kt b/feature/userdetails/src/main/java/in/svbneelmane/useranz/presentation/userdetails/UserDetailsScreen.kt
+--- a/feature/userdetails/src/main/java/in/svbneelmane/useranz/presentation/userdetails/UserDetailsScreen.kt	(revision 156d7921577efea1df19cd8ca220189f521e5e8e)
++++ b/feature/userdetails/src/main/java/in/svbneelmane/useranz/presentation/userdetails/UserDetailsScreen.kt	(date 1778750046454)
+@@ -1,3 +1,8 @@
++/**
++ * @author shivaprasad-bhat
++ * @created May 14, 2026
++ */
++
+ package `in`.svbneelmane.useranz.presentation.userdetails
+ 
+ import androidx.compose.foundation.layout.Arrangement
+@@ -36,9 +41,6 @@
+  * @param user The user object containing all detail information
+  * @param onBackClick Callback invoked when back button is pressed
+  * @param modifier Compose modifier for layout customization
+- *
+- * @author shivaprasad-bhat
+- * @created May 14, 2026
+  */
+ @Composable
+ fun UserDetailsScreen(
+Index: core/model/src/main/java/in/svbneelmane/useranz/domain/model/User.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package `in`.svbneelmane.useranz.domain.model\n\n/**\n * Domain model representing a user in the application.\n *\n * Contains all user information fetched from the API including profile,\n * contact, and location details. Provides computed [fullName] property\n * by combining first and last name.\n *\n * @property id Unique identifier for the user\n * @property email User's email address\n * @property firstName User's first name\n * @property lastName User's last name\n * @property avatarUrl URL to the user's profile image\n * @property company Name of the company the user works for\n * @property username User's unique username/handle\n * @property address Street address of the user\n * @property zip Postal/ZIP code\n * @property state State/Province of residence\n * @property country Country of residence\n * @property phone Contact phone number\n *\n * @author shivaprasad-bhat\n * @created May 14, 2026\n */\ndata class User(\n    val id: Int,\n    val email: String,\n    val firstName: String,\n    val lastName: String,\n    val avatarUrl: String,\n    val company: String,\n    val username: String,\n    val address: String,\n    val zip: String,\n    val state: String,\n    val country: String,\n    val phone: String\n) {\n    /**\n     * Computed property that returns the full name by combining first and last names.\n     * Returns only non-blank parts separated by space.\n     */\n    val fullName: String\n        get() = listOf(firstName, lastName).filter { it.isNotBlank() }.joinToString(\" \")\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/model/src/main/java/in/svbneelmane/useranz/domain/model/User.kt b/core/model/src/main/java/in/svbneelmane/useranz/domain/model/User.kt
+--- a/core/model/src/main/java/in/svbneelmane/useranz/domain/model/User.kt	(revision 156d7921577efea1df19cd8ca220189f521e5e8e)
++++ b/core/model/src/main/java/in/svbneelmane/useranz/domain/model/User.kt	(date 1778750046451)
+@@ -1,3 +1,8 @@
++/**
++ * @author shivaprasad-bhat
++ * @created May 14, 2026
++ */
++
+ package `in`.svbneelmane.useranz.domain.model
+ 
+ /**
+@@ -19,9 +24,6 @@
+  * @property state State/Province of residence
+  * @property country Country of residence
+  * @property phone Contact phone number
+- *
+- * @author shivaprasad-bhat
+- * @created May 14, 2026
+  */
+ data class User(
+     val id: Int,
+Index: app/src/main/java/in/svbneelmane/useranz/ui/theme/Color.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package `in`.svbneelmane.useranz.ui.theme\n\nimport androidx.compose.ui.graphics.Color\n\nval Purple80 = Color(0xFFD0BCFF)\nval PurpleGrey80 = Color(0xFFCCC2DC)\nval Pink80 = Color(0xFFEFB8C8)\n\nval Purple40 = Color(0xFF6650a4)\nval PurpleGrey40 = Color(0xFF625b71)\nval Pink40 = Color(0xFF7D5260)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/in/svbneelmane/useranz/ui/theme/Color.kt b/app/src/main/java/in/svbneelmane/useranz/ui/theme/Color.kt
+--- a/app/src/main/java/in/svbneelmane/useranz/ui/theme/Color.kt	(revision 156d7921577efea1df19cd8ca220189f521e5e8e)
++++ b/app/src/main/java/in/svbneelmane/useranz/ui/theme/Color.kt	(date 1778750046450)
+@@ -1,3 +1,8 @@
++/**
++ * @author shivaprasad-bhat
++ * @created May 14, 2026
++ */
++
+ package `in`.svbneelmane.useranz.ui.theme
+ 
+ import androidx.compose.ui.graphics.Color
+Index: domain/user/src/main/java/in/svbneelmane/useranz/domain/usecase/GetUsersUseCase.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package `in`.svbneelmane.useranz.domain.usecase\n\nimport `in`.svbneelmane.useranz.domain.model.User\nimport `in`.svbneelmane.useranz.domain.repository.UserRepository\nimport kotlinx.coroutines.flow.Flow\nimport javax.inject.Inject\n\n/**\n * Use case for fetching a list of users.\n *\n * Implements single responsibility principle by delegating to the repository.\n * Returns a Flow<Result> stream to support reactive data consumption.\n *\n * @property repository The user repository providing data access\n *\n * @author shivaprasad-bhat\n * @created May 14, 2026\n */\nclass GetUsersUseCase @Inject constructor(\n    private val repository: UserRepository\n) {\n\n    /**\n     * Invokes the use case to fetch users from the repository.\n     *\n     * @param page The page number of users to fetch (default = 1)\n     * @return Flow emitting Result containing the list of users or an exception on failure\n     */\n    operator fun invoke(page: Int = 1): Flow<Result<List<User>>> {\n        return repository.getUsers(page)\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/domain/user/src/main/java/in/svbneelmane/useranz/domain/usecase/GetUsersUseCase.kt b/domain/user/src/main/java/in/svbneelmane/useranz/domain/usecase/GetUsersUseCase.kt
+--- a/domain/user/src/main/java/in/svbneelmane/useranz/domain/usecase/GetUsersUseCase.kt	(revision 156d7921577efea1df19cd8ca220189f521e5e8e)
++++ b/domain/user/src/main/java/in/svbneelmane/useranz/domain/usecase/GetUsersUseCase.kt	(date 1778750046454)
+@@ -1,3 +1,8 @@
++/**
++ * @author shivaprasad-bhat
++ * @created May 14, 2026
++ */
++
+ package `in`.svbneelmane.useranz.domain.usecase
+ 
+ import `in`.svbneelmane.useranz.domain.model.User
+@@ -12,9 +17,6 @@
+  * Returns a Flow<Result> stream to support reactive data consumption.
+  *
+  * @property repository The user repository providing data access
+- *
+- * @author shivaprasad-bhat
+- * @created May 14, 2026
+  */
+ class GetUsersUseCase @Inject constructor(
+     private val repository: UserRepository
+Index: app/src/main/java/in/svbneelmane/useranz/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package `in`.svbneelmane.useranz\n\nimport android.os.Bundle\nimport androidx.activity.ComponentActivity\nimport androidx.activity.compose.setContent\nimport androidx.activity.enableEdgeToEdge\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.material3.ExperimentalMaterial3Api\nimport androidx.compose.material3.MaterialTheme\nimport androidx.compose.material3.Scaffold\nimport androidx.compose.material3.Text\nimport androidx.compose.material3.TopAppBar\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.getValue\nimport androidx.compose.runtime.remember\nimport androidx.compose.ui.Modifier\nimport androidx.hilt.navigation.compose.hiltViewModel\nimport androidx.lifecycle.compose.collectAsStateWithLifecycle\nimport androidx.navigation.NavType\nimport androidx.navigation.NavHostController\nimport androidx.navigation.compose.NavHost\nimport androidx.navigation.compose.composable\nimport androidx.navigation.compose.rememberNavController\nimport androidx.navigation.navArgument\nimport dagger.hilt.android.AndroidEntryPoint\nimport `in`.svbneelmane.useranz.presentation.components.ErrorView\nimport `in`.svbneelmane.useranz.presentation.components.LoadingIndicator\nimport `in`.svbneelmane.useranz.presentation.userlist.UserListScreen\nimport `in`.svbneelmane.useranz.presentation.userlist.UserListUiState\nimport `in`.svbneelmane.useranz.presentation.userlist.UserListViewModel\nimport `in`.svbneelmane.useranz.presentation.userdetails.UserDetailsScreen\nimport `in`.svbneelmane.useranz.ui.theme.UserANZTheme\n\n/**\n * Main entry point activity for the UserANZ application.\n *\n * This activity sets up the Compose UI with theme and navigation.\n * It handles the root navigation between user list and user details screens.\n *\n * @author shivaprasad-bhat\n * @created May 14, 2026\n */\n@AndroidEntryPoint\nclass MainActivity : ComponentActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        enableEdgeToEdge()\n        setContent {\n            UserANZTheme {\n                UserAnzRoot()\n            }\n        }\n    }\n}\n\nprivate const val ROUTE_USERS = \"users\"\nprivate const val ARG_USER_ID = \"userId\"\nprivate const val ROUTE_USER_DETAILS = \"user/{$ARG_USER_ID}\"\n\nprivate fun userDetailsRoute(userId: Int): String = \"user/$userId\"\n\n/**\n * Root composable for the UserANZ application.\n *\n * Manages the app shell including the main scaffold, top app bar, and navigation host.\n * Handles navigation between list and details screens.\n *\n * @author shivaprasad-bhat\n * @created May 14, 2026\n */\n@Composable\nprivate fun UserAnzRoot() {\n    val navController = rememberNavController()\n\n    Scaffold(\n        modifier = Modifier.fillMaxSize(),\n        containerColor = MaterialTheme.colorScheme.background,\n        topBar = { UserAppTopBar() }\n    ) { innerPadding ->\n        NavHost(\n            navController = navController,\n            startDestination = ROUTE_USERS,\n            modifier = Modifier.padding(innerPadding)\n        ) {\n            composable(ROUTE_USERS) {\n                UserListScreen(\n                    onUserClick = { userId ->\n                        navController.navigate(userDetailsRoute(userId))\n                    }\n                )\n            }\n            composable(\n                route = ROUTE_USER_DETAILS,\n                arguments = listOf(navArgument(ARG_USER_ID) { type = NavType.IntType })\n            ) { backStackEntry ->\n                UserDetailsRoute(navController = navController, userId = backStackEntry.arguments?.getInt(ARG_USER_ID))\n            }\n        }\n    }\n}\n\n/**\n * Handles the user details route state and UI.\n *\n * Retrieves the shared ViewModel from the list screen's back stack entry,\n * collects the list state, finds the selected user by ID, and displays their details.\n *\n * @param navController Navigation controller for handling back navigation\n * @param userId The ID of the user to display details for\n *\n * @author shivaprasad-bhat\n * @created May 14, 2026\n */\n@Composable\nprivate fun UserDetailsRoute(navController: NavHostController, userId: Int?) {\n    val parentEntry = remember(navController) { navController.getBackStackEntry(ROUTE_USERS) }\n    val viewModel: UserListViewModel = hiltViewModel(parentEntry)\n    val uiState by viewModel.uiState.collectAsStateWithLifecycle()\n\n    when (val state = uiState) {\n        is UserListUiState.Loading -> LoadingIndicator()\n        is UserListUiState.Error -> ErrorView(\n            message = state.message,\n            onRetry = { viewModel.loadUsers() }\n        )\n        is UserListUiState.Success -> {\n            val selectedUser = state.users.firstOrNull { it.id == userId }\n            if (selectedUser == null) {\n                ErrorView(\n                    message = \"User not found\",\n                    onRetry = { navController.popBackStack() }\n                )\n            } else {\n                UserDetailsScreen(\n                    user = selectedUser,\n                    onBackClick = { navController.popBackStack() }\n                )\n            }\n        }\n    }\n}\n\n/**\n * Renders the app-level top bar with a title.\n *\n * @author shivaprasad-bhat\n * @created May 14, 2026\n */\n@OptIn(ExperimentalMaterial3Api::class)\n@Composable\nprivate fun UserAppTopBar() {\n    TopAppBar(title = { Text(text = \"User App\") })\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/in/svbneelmane/useranz/MainActivity.kt b/app/src/main/java/in/svbneelmane/useranz/MainActivity.kt
+--- a/app/src/main/java/in/svbneelmane/useranz/MainActivity.kt	(revision 156d7921577efea1df19cd8ca220189f521e5e8e)
++++ b/app/src/main/java/in/svbneelmane/useranz/MainActivity.kt	(date 1778750046449)
+@@ -1,3 +1,8 @@
++/**
++ * @author shivaprasad-bhat
++ * @created May 14, 2026
++ */
++
+ package `in`.svbneelmane.useranz
+ 
+ import android.os.Bundle
+@@ -37,9 +42,6 @@
+  *
+  * This activity sets up the Compose UI with theme and navigation.
+  * It handles the root navigation between user list and user details screens.
+- *
+- * @author shivaprasad-bhat
+- * @created May 14, 2026
+  */
+ @AndroidEntryPoint
+ class MainActivity : ComponentActivity() {
+@@ -65,9 +67,6 @@
+  *
+  * Manages the app shell including the main scaffold, top app bar, and navigation host.
+  * Handles navigation between list and details screens.
+- *
+- * @author shivaprasad-bhat
+- * @created May 14, 2026
+  */
+ @Composable
+ private fun UserAnzRoot() {
+@@ -108,9 +107,6 @@
+  *
+  * @param navController Navigation controller for handling back navigation
+  * @param userId The ID of the user to display details for
+- *
+- * @author shivaprasad-bhat
+- * @created May 14, 2026
+  */
+ @Composable
+ private fun UserDetailsRoute(navController: NavHostController, userId: Int?) {
+@@ -143,9 +139,6 @@
+ 
+ /**
+  * Renders the app-level top bar with a title.
+- *
+- * @author shivaprasad-bhat
+- * @created May 14, 2026
+  */
+ @OptIn(ExperimentalMaterial3Api::class)
+ @Composable
+Index: feature/userlist/src/main/java/in/svbneelmane/useranz/presentation/userlist/UserListViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package `in`.svbneelmane.useranz.presentation.userlist\n\nimport androidx.lifecycle.ViewModel\nimport androidx.lifecycle.viewModelScope\nimport dagger.hilt.android.lifecycle.HiltViewModel\nimport `in`.svbneelmane.useranz.domain.usecase.GetUsersUseCase\nimport kotlinx.coroutines.Job\nimport kotlinx.coroutines.flow.MutableStateFlow\nimport kotlinx.coroutines.flow.StateFlow\nimport kotlinx.coroutines.flow.asStateFlow\nimport kotlinx.coroutines.launch\nimport kotlinx.coroutines.flow.collect\nimport javax.inject.Inject\n\n/**\n * ViewModel for managing user list screen state and business logic.\n *\n * Handles fetching users from the use case, managing UI state transitions (Loading, Success, Error),\n * and exposing state as a Flow for UI consumption.\n *\n * @property getUsersUseCase The use case for fetching users\n *\n * @author shivaprasad-bhat\n * @created May 14, 2026\n */\n@HiltViewModel\nclass UserListViewModel @Inject constructor(\n    private val getUsersUseCase: GetUsersUseCase\n) : ViewModel() {\n\n    private val _uiState = MutableStateFlow<UserListUiState>(UserListUiState.Loading)\n    val uiState: StateFlow<UserListUiState> = _uiState.asStateFlow()\n\n    private var loadUsersJob: Job? = null\n\n    init {\n        loadUsers()\n    }\n\n    fun loadUsers(page: Int = 1) {\n        loadUsersJob?.cancel()\n        loadUsersJob = viewModelScope.launch {\n            _uiState.value = UserListUiState.Loading\n            getUsersUseCase(page).collect { result ->\n                result\n                    .onSuccess { users ->\n                        _uiState.value = UserListUiState.Success(users)\n                    }\n                    .onFailure { error ->\n                        _uiState.value = UserListUiState.Error(\n                            error.message ?: \"An unknown error occurred\"\n                        )\n                    }\n            }\n        }\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/feature/userlist/src/main/java/in/svbneelmane/useranz/presentation/userlist/UserListViewModel.kt b/feature/userlist/src/main/java/in/svbneelmane/useranz/presentation/userlist/UserListViewModel.kt
+--- a/feature/userlist/src/main/java/in/svbneelmane/useranz/presentation/userlist/UserListViewModel.kt	(revision 156d7921577efea1df19cd8ca220189f521e5e8e)
++++ b/feature/userlist/src/main/java/in/svbneelmane/useranz/presentation/userlist/UserListViewModel.kt	(date 1778750046455)
+@@ -1,3 +1,8 @@
++/**
++ * @author shivaprasad-bhat
++ * @created May 14, 2026
++ */
++
+ package `in`.svbneelmane.useranz.presentation.userlist
+ 
+ import androidx.lifecycle.ViewModel
+@@ -19,9 +24,6 @@
+  * and exposing state as a Flow for UI consumption.
+  *
+  * @property getUsersUseCase The use case for fetching users
+- *
+- * @author shivaprasad-bhat
+- * @created May 14, 2026
+  */
+ @HiltViewModel
+ class UserListViewModel @Inject constructor(
+Index: data/user/src/main/java/in/svbneelmane/useranz/di/DispatcherQualifiers.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package `in`.svbneelmane.useranz.di\n\nimport javax.inject.Qualifier\n\n@Qualifier\n@Retention(AnnotationRetention.BINARY)\nannotation class IoDispatcher\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/data/user/src/main/java/in/svbneelmane/useranz/di/DispatcherQualifiers.kt b/data/user/src/main/java/in/svbneelmane/useranz/di/DispatcherQualifiers.kt
+--- a/data/user/src/main/java/in/svbneelmane/useranz/di/DispatcherQualifiers.kt	(revision 156d7921577efea1df19cd8ca220189f521e5e8e)
++++ b/data/user/src/main/java/in/svbneelmane/useranz/di/DispatcherQualifiers.kt	(date 1778750046453)
+@@ -1,3 +1,8 @@
++/**
++ * @author shivaprasad-bhat
++ * @created May 14, 2026
++ */
++
+ package `in`.svbneelmane.useranz.di
+ 
+ import javax.inject.Qualifier
+Index: feature/userlist/src/main/java/in/svbneelmane/useranz/presentation/userlist/UserListScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package `in`.svbneelmane.useranz.presentation.userlist\n\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.lazy.LazyColumn\nimport androidx.compose.foundation.lazy.items\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.getValue\nimport androidx.compose.ui.Modifier\nimport androidx.hilt.navigation.compose.hiltViewModel\nimport androidx.lifecycle.compose.collectAsStateWithLifecycle\nimport `in`.svbneelmane.useranz.presentation.components.ErrorView\nimport `in`.svbneelmane.useranz.presentation.components.LoadingIndicator\nimport `in`.svbneelmane.useranz.presentation.components.UserCard\n\n/**\n * Displays a list of users in a scrollable column.\n *\n * Manages different UI states:\n * - Loading: Shows a loading indicator\n * - Success: Displays user cards in a lazy list\n * - Error: Shows error message with retry button\n *\n * @param modifier Compose modifier for layout customization\n * @param viewModel ViewModel providing user list state\n * @param onUserClick Callback invoked when a user card is tapped with user ID\n *\n * @author shivaprasad-bhat\n * @created May 14, 2026\n */\n@Composable\nfun UserListScreen(\n    modifier: Modifier = Modifier,\n    viewModel: UserListViewModel = hiltViewModel(),\n    onUserClick: (Int) -> Unit = {}\n) {\n    val uiState by viewModel.uiState.collectAsStateWithLifecycle()\n\n    when (val state = uiState) {\n        is UserListUiState.Loading -> LoadingIndicator(modifier = modifier)\n        is UserListUiState.Error -> ErrorView(\n            message = state.message,\n            onRetry = { viewModel.loadUsers() },\n            modifier = modifier\n        )\n        is UserListUiState.Success -> {\n            LazyColumn(modifier = modifier.fillMaxSize()) {\n                items(state.users, key = { it.id }) { user ->\n                    UserCard(\n                        user = user,\n                        onClick = { onUserClick(user.id) }\n                    )\n                }\n            }\n        }\n    }\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/feature/userlist/src/main/java/in/svbneelmane/useranz/presentation/userlist/UserListScreen.kt b/feature/userlist/src/main/java/in/svbneelmane/useranz/presentation/userlist/UserListScreen.kt
+--- a/feature/userlist/src/main/java/in/svbneelmane/useranz/presentation/userlist/UserListScreen.kt	(revision 156d7921577efea1df19cd8ca220189f521e5e8e)
++++ b/feature/userlist/src/main/java/in/svbneelmane/useranz/presentation/userlist/UserListScreen.kt	(date 1778750046455)
+@@ -1,3 +1,8 @@
++/**
++ * @author shivaprasad-bhat
++ * @created May 14, 2026
++ */
++
+ package `in`.svbneelmane.useranz.presentation.userlist
+ 
+ import androidx.compose.foundation.layout.fillMaxSize
+@@ -23,9 +28,6 @@
+  * @param modifier Compose modifier for layout customization
+  * @param viewModel ViewModel providing user list state
+  * @param onUserClick Callback invoked when a user card is tapped with user ID
+- *
+- * @author shivaprasad-bhat
+- * @created May 14, 2026
+  */
+ @Composable
+ fun UserListScreen(
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># UserANZ\n\nAn Android app that fetches and displays a list of users from a remote API with a detail view for each user.\n\n## Architecture\n\nClean Architecture with multi-module structure and MVI pattern.\n\n```\napp/          → Entry point, navigation\ncore/model/   → Shared domain models\ndata/user/    → API, DTOs, mappers, repository\ndomain/user/  → Repository interface, use cases\nfeature/\n  userlist/   → User list screen & ViewModel\n  userdetails/→ User detail screen\n```\n\n## Tech Stack\n\n| Category | Library |\n|---|---|\n| Language | Kotlin 2.2.10 |\n| UI | Jetpack Compose + Material 3 |\n| DI | Hilt 2.56.2 |\n| Networking | Retrofit 2.11.0 + OkHttp 4.12.0 |\n| Image Loading | Coil 2.7.0 |\n| Async | Kotlin Coroutines + Flow |\n| Navigation | Navigation Compose 2.9.0 |\n| Testing | JUnit 4, Mockito, coroutines-test |\n\n## Assumptions & Decisions\n\n- **Details screen reuses the list ViewModel** to avoid an extra network call\n- **Pagination is scaffolded** (`page` param in use case/repository) but not yet wired to the UI\n- **No offline caching** — data is fetched fresh each session\n- **No search/filter** — all users from the API are displayed as-is\n\n## Media\n\n### Screenshots\n\n![User List](app/media/screenshots/Screenshot-1.jpg)\n![User Details](app/media/screenshots/Screenshot-2.jpg)\n\n### Demo Video\n\n[Watch recording](app/media/videos/Recording.mp4)\n\n## Potential Improvements\n\n- Pagination with Paging 3\n- Offline support with Room\n- Search and filter on the list screen\n- Pull-to-refresh\n\n## Getting Started\n\n```bash\n./gradlew assembleDebug   # build\n./gradlew test            # unit tests\n```\n\n**Author:** shivaprasad-bhat · May 14, 2026\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/README.md b/README.md
+--- a/README.md	(revision 156d7921577efea1df19cd8ca220189f521e5e8e)
++++ b/README.md	(date 1778749908614)
+@@ -61,4 +61,3 @@
+ ./gradlew test            # unit tests
+ ```
+ 
+-**Author:** shivaprasad-bhat · May 14, 2026
+Index: data/user/src/main/java/in/svbneelmane/useranz/di/AppModule.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package `in`.svbneelmane.useranz.di\n\nimport dagger.Module\nimport dagger.Provides\nimport dagger.hilt.InstallIn\nimport dagger.hilt.components.SingletonComponent\nimport `in`.svbneelmane.useranz.data.remote.api.UserApiService\nimport kotlinx.coroutines.CoroutineDispatcher\nimport kotlinx.coroutines.Dispatchers\nimport okhttp3.OkHttpClient\nimport okhttp3.logging.HttpLoggingInterceptor\nimport retrofit2.Retrofit\nimport retrofit2.converter.gson.GsonConverterFactory\nimport javax.inject.Singleton\n\n@Module\n@InstallIn(SingletonComponent::class)\nobject AppModule {\n\n    private const val BASE_URL = \"https://fake-json-api.mock.beeceptor.com/\"\n\n    @Provides\n    @Singleton\n    fun provideLoggingInterceptor(): HttpLoggingInterceptor =\n        HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }\n\n    @Provides\n    @Singleton\n    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =\n        OkHttpClient.Builder()\n            .addInterceptor(loggingInterceptor)\n            .build()\n\n    @Provides\n    @Singleton\n    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =\n        Retrofit.Builder()\n            .baseUrl(BASE_URL)\n            .client(okHttpClient)\n            .addConverterFactory(GsonConverterFactory.create())\n            .build()\n\n    @Provides\n    @Singleton\n    fun provideUserApiService(retrofit: Retrofit): UserApiService =\n        retrofit.create(UserApiService::class.java)\n\n    @Provides\n    @IoDispatcher\n    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/data/user/src/main/java/in/svbneelmane/useranz/di/AppModule.kt b/data/user/src/main/java/in/svbneelmane/useranz/di/AppModule.kt
+--- a/data/user/src/main/java/in/svbneelmane/useranz/di/AppModule.kt	(revision 156d7921577efea1df19cd8ca220189f521e5e8e)
++++ b/data/user/src/main/java/in/svbneelmane/useranz/di/AppModule.kt	(date 1778750046452)
+@@ -1,3 +1,8 @@
++/**
++ * @author shivaprasad-bhat
++ * @created May 14, 2026
++ */
++
+ package `in`.svbneelmane.useranz.di
+ 
+ import dagger.Module
